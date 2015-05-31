@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 '''
-Simplified by Wei Zixi (ziwei@cisco.com) from original ACItoolkit for UCSD used case.
+Simplified by Wei Zixi (ziwei@cisco.com) from original ACItoolkit for UCSD use case.
 All credit to original author.
 
 ################################################################################
