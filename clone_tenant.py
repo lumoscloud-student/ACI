@@ -45,7 +45,7 @@ from credentials import *
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
-# Hardcoded variable for HKJC UCSD POC Case
+# Hardcoded variable for Your UCSD POC Case
 #from_apic = {
 #    # Fill in with the APIC admin user id
 #    'LOGIN': '',
