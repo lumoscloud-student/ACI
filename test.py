@@ -45,27 +45,6 @@ from credentials import *
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
-# Hardcoded variable for HKJC UCSD POC Case
-#from_apic = {
-#    # Fill in with the APIC admin user id
-#    'LOGIN': '',
-#    # Fill in with the APIC admin password
-#    'PASSWORD': '',
-#    # Fill in with the APIC IP address
-#    'URL': 'https://' + '',
-#    # Tenant or application that to be copied
-#}
-#
-#to_apic = {
-#    # Fill in with the APIC admin user id
-#    'LOGIN': '',
-#    # Fill in with the APIC admin password
-#    'PASSWORD': '',
-#    # Fill in with the APIC IP address
-#    'URL': 'https://' + '',
-#    # Tenant or application that to be copied
-#}
-
 # Define JSON manipulation actions
 action = {
     # when copy_json is True, json files related to the tenant or application
@@ -90,11 +69,6 @@ def get_json_file_from_apic():
         sys.exit()
 
     def get_contract_json():
-        existing_tenants = Tenant.get(session)
-        for tenant in existing_tenants:
-            if str(tenant) == to_tenant:
-                print 'Tenant existed, task abroted.'
-                sys.exit()
         class_query_url = '/api/node/class/fvTenant.json'
         ret = session.get(class_query_url)
         data = ret.json()['imdata']
@@ -110,44 +84,20 @@ def get_json_file_from_apic():
     json_file = get_contract_json()
     return json_file
 
-# Define function to push JSON configuration to APIC
-def push_json_to_apic(json_content):
-    """
-    :param json_content: the json file to be pushed to APIC
-    :return: the respond of the push action
-    """
-    session = Session(to_apic['URL'], to_apic['LOGIN'], to_apic['PASSWORD'])
+def get_tenant_name():
+
+    session = Session(from_apic['URL'], from_apic['LOGIN'], from_apic['PASSWORD'])
     resp = session.login()
     if not resp.ok:
         print '%% Could not login to APIC'
         sys.exit()
 
-    return session.push_to_apic('/api/mo/uni.json', json_content)
+    Tenants = Tenant.get(session)
+    for tenant in Tenants:
+        if tenant = to_tenant:
+            Print 'Tenant existed, task abroted.'
+            sys.exit()
+        else:
+            print 'Tenant' + to_tenant + 'will be cteated'
 
-# Define output filename prefix
-time_prefix = time.strftime("%Y%m%d-%H%M%S")
-
-# Main Entrance for copy action
-if __name__ == '__main__':
-
-    if action['copy_json']:
-
-        contract_json = get_json_file_from_apic()
-        del contract_json['fvTenant']['attributes']['dn']
-    with open('/usr/local/ACI/log/' + time_prefix + '_original_tenant.txt', 'w') as outfile:
-        json.dump(contract_json, outfile)
-
-    if action['paste_json']:
-
-        # change tenant name before pushing to another APIC
-        if from_tenant != to_tenant:
-            contract_json['fvTenant']['attributes']['name'] = to_tenant
-            with open('/usr/local/ACI/log/' + time_prefix + '_cloned_tenant.txt', 'w') as outfile:
-                json.dump(contract_json, outfile)
-
-        res = str(push_json_to_apic(contract_json))
-
-    if res != '<Response [200]>':
-        print 'Task failed'
-    else:
-        print 'Task is successfully completed.'
+get_tenant_name()
