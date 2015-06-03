@@ -68,8 +68,8 @@ except IndexError:
     tenant_name = 'Customer-A'
 context_name = tenant_name + '-L3'
 bd1_name = tenant_name + '-BD1'
-bd2_name = tenant_name + '-BD1'
-bd3_name = tenant_name + '-BD1'
+bd2_name = tenant_name + '-BD2'
+bd3_name = tenant_name + '-BD3'
 
 # Create the Tenant
 tenant = Tenant(tenant_name)
