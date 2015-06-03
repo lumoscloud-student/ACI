@@ -55,9 +55,9 @@ from acitoolkit.acitoolkit import *
 #from credentials import *
 
 # Credentials
-URL = 'https://10.4.255.5'
-LOGIN = 'admin'
-PASSWORD = 'C1sc0123'
+URL = apic['URL']
+LOGIN = apic['LOGIN']
+PASSWORD = apic['PASSWORD']
 
 # Disable https certificate warning
 import requests.packages.urllib3
