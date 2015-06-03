@@ -70,12 +70,13 @@ context_name = tenant_name + '-L3'
 bd1_name = tenant_name + '-BD1'
 bd2_name = tenant_name + '-BD2'
 bd3_name = tenant_name + '-BD3'
+app_pro_name = '3-Tier-App'
 
 # Create the Tenant
 tenant = Tenant(tenant_name)
 
 # Create the Application Profile
-app = AppProfile('3-Tier-App', tenant)
+app = AppProfile(app_pro_name, tenant)
 
 # Create the EPG
 epg1 = EPG('EPG-WEB', app)
@@ -181,8 +182,8 @@ vmm_domain = 'VMM-Philip'
 epglist = EPG.get(session, parent=app, tenant=tenant)
 for epg in epglist:
     epg = epg.get_json()['fvAEPg']['attributes']['name']
-    epg_mo_url = '/api/node/mo/uni/tn-' + tenant_name + '/ap-3-Tier-App/epg-'+epg+'.json'
-    json_content = '{"fvRsDomAtt":{"attributes":{"tDn":"uni/vmmp-VMware/dom-'+vmm_domain+'","status":"created"},"children":[]}}'
+    epg_mo_url = '/api/node/mo/uni/tn-' + tenant_name + '/ap-' + app_pro_name + '/epg-' + epg + '.json'
+    json_content = '{"fvRsDomAtt":{"attributes":{"tDn":"uni/vmmp-VMware/dom-' + vmm_domain +'","status":"created"},"children":[]}}'
     json_content = ast.literal_eval(json_content)
     resp = session.push_to_apic(epg_mo_url, json_content)
     if resp.ok:
