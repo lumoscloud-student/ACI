@@ -50,11 +50,9 @@ import json
 import time
 from acitoolkit.acisession import *
 from acitoolkit.acitoolkit import *
+from credentials import *
 
-# Decrypted and use credentials defined below
-#from credentials import *
-
-# Credentials
+# Import credentials from credentials.py
 URL = apic['URL']
 LOGIN = apic['LOGIN']
 PASSWORD = apic['PASSWORD']
