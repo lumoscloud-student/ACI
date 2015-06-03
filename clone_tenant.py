@@ -93,7 +93,7 @@ def get_json_file_from_apic():
         existing_tenants = Tenant.get(session)
         for tenant in existing_tenants:
             if str(tenant) == to_tenant:
-                print 'Tenant existed, task abroted.'
+                print 'Tenant existed, task aborted.'
                 sys.exit()
         class_query_url = '/api/node/class/fvTenant.json'
         ret = session.get(class_query_url)
@@ -134,8 +134,8 @@ if __name__ == '__main__':
 
         contract_json = get_json_file_from_apic()
         del contract_json['fvTenant']['attributes']['dn']
-    with open('/usr/local/ACI/log/' + time_prefix + '_original_tenant.txt', 'w') as outfile:
-        json.dump(contract_json, outfile)
+        with open('/usr/local/ACI/log/' + time_prefix + '_original_tenant.txt', 'w') as outfile:
+            json.dump(contract_json, outfile)
 
     if action['paste_json']:
 
