@@ -35,8 +35,8 @@ import ast
 import sys
 import json
 import time
-from acitoolkit.acisession import Session
-from acitoolkit.acitoolkit import Tenant
+from acitoolkit.acisession import *
+from acitoolkit.acitoolkit import *
 
 # Decrypted and use credentials defined below
 from credentials import *
@@ -45,21 +45,6 @@ from credentials import *
 import requests.packages.urllib3
 requests.packages.urllib3.disable_warnings()
 
-# Define JSON manipulation actions
-action = {
-    # when copy_json is True, json files related to the tenant or application
-    # profile will be acquire from APIC and push to your github account.
-    # when paste_json is True, json file on your github account will be pulled
-    # and applied to your target APIC (to_apic).
-    'copy_json': True,
-    'paste_json': True
-}
-
-# Gather Tenant name from cli argument
-from_tenant = str(sys.argv[1])
-to_tenant = str(sys.argv[2])
-
-# Define function to get all tenant configuration as JSON from APIC
 def get_json_file_from_apic():
 
     session = Session(from_apic['URL'], from_apic['LOGIN'], from_apic['PASSWORD'])
@@ -68,23 +53,30 @@ def get_json_file_from_apic():
         print '%% Could not login to APIC'
         sys.exit()
 
-    def get_contract_json():
-        class_query_url = '/api/node/class/fvTenant.json'
-        ret = session.get(class_query_url)
-        data = ret.json()['imdata']
-        for ap in data:
-            dn = ap['fvTenant']['attributes']['dn']
-            tenant_name = dn.split('/')[1][3:]
-            #class_query_url = '/api/mo/uni/tn-aci-toolkit-demo.json?query-target=subtree&rsp-subtree=full&rsp-subtree-include=audit-logs,no-scoped'
-            ap_query_url = '/api/mo/uni/tn-%s.json?rsp-subtree=full&rsp-prop-include=config-only' % (tenant_name)
-            ret = session.get(ap_query_url)
-            if tenant_name == from_tenant:
-                return ast.literal_eval(ret.text)['imdata'][0]
+    vmm_domains = VmmDomain.get(session)
+    print vmm_domains
+    for domain in vmm_domains:
+        print domain.get_parent()
 
-    json_file = get_contract_json()
-    return json_file
+get_json_file_from_apic()
 
-def get_tenant_name():
+#def get_egg_file_from_apic():
+#
+#    session = Session(from_apic['URL'], from_apic['LOGIN'], from_apic['PASSWORD'])
+#    resp = session.login()
+#    if not resp.ok:
+#        print '%% Could not login to APIC'
+#        sys.exit()
+#
+#    class_query_url = '/api/node/class/DomP.json'
+#    result = session.get(class_query_url)
+#    data = result.json()['imdata']
+#    with open('./temp.txt', 'w') as outfile:
+#            json.dump(data, outfile)
+#
+#get_egg_file_from_apic()
+
+def get_egg_detail_from_apic():
 
     session = Session(from_apic['URL'], from_apic['LOGIN'], from_apic['PASSWORD'])
     resp = session.login()
@@ -92,12 +84,39 @@ def get_tenant_name():
         print '%% Could not login to APIC'
         sys.exit()
 
-    Tenants = Tenant.get(session)
-    for tenant in Tenants:
-        if tenant = to_tenant:
-            Print 'Tenant existed, task abroted.'
-            sys.exit()
-        else:
-            print 'Tenant' + to_tenant + 'will be cteated'
+    class_query_url = '/api/mo/uni/tn-HKJC-OA/ap-OA-App/epg-EPG-OA-App.json?rsp-subtree=full&rsp-prop-include=config-only'
+    result = session.get(class_query_url)
+    data = result.json()['imdata'][0]
+    with open('./temp1.txt', 'w') as outfile:
+            json.dump(data, outfile)
 
-get_tenant_name()
+get_egg_detail_from_apic()
+
+def get_epgdomain_from_apic():
+
+    session = Session(from_apic['URL'], from_apic['LOGIN'], from_apic['PASSWORD'])
+    resp = session.login()
+    if not resp.ok:
+        print '%% Could not login to APIC'
+        sys.exit()
+
+    domains = EPGDomain.get(session)
+    for domain in domains:
+        print domain.get_json
+
+get_epgdomain_from_apic()
+
+def assign_vmm():
+    session = Session(from_apic['URL'], from_apic['LOGIN'], from_apic['PASSWORD'])
+    resp = session.login()
+    if not resp.ok:
+        print '%% Could not login to APIC'
+        sys.exit()
+
+    tenant = Tenant('ziwei')
+    app = AppProfile('app', tenant)
+    epg = EPG('web', app)
+    vmm = VmmDomain('VMM-Philip', None)
+    epg.attach(vmm)
+
+assign_vmm()
