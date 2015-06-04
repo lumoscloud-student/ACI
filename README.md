@@ -1,3 +1,3 @@
 # ACI
 
-This is the repositroy of ACI scripts to conduct some ACI fabric operation, e.g. CRUD of tenant, application, epg, etc.
+This is the repositroy of my pythons scripts to conduct ACI fabric operation, e.g. CRUD of tenant, application network profile, epg, etc.
