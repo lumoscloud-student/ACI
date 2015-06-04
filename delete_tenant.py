@@ -62,7 +62,6 @@ def delete_tenant():
         tenant = tenant.get_json()['fvTenant']['attributes']['name']
         tenant_list.insert(0, tenant)
 
-
     tenant_list = list(enumerate(tenant_list))
     print 'ID\tTenant Name'
     for entry in tenant_list:
