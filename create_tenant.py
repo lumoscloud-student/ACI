@@ -65,7 +65,14 @@ requests.packages.urllib3.disable_warnings()
 try:
     tenant_name = str(sys.argv[1])
 except IndexError:
-    tenant_name = 'Customer-A'
+    print 'No Tenant name input, Tenant "Cusomter-A" will be created.' + '\n' + 'You can use "python create_tenant [Tenant Name]" syntax to create tenant with desired name.'
+    ask_for_confirmation = raw_input('Please input "YES" or "Y" if you want to create tenant "Customer-A": ')
+    if ask_for_confirmation == 'YES' or ask_for_confirmation == 'Y':
+        tenant_name = 'Customer-A'
+    else:
+        print '\n' + 'Input error, task aborted.'
+
+# Define Tenant variables    
 context_name = tenant_name + '-L3'
 bd1_name = tenant_name + '-BD1'
 bd2_name = tenant_name + '-BD2'
