@@ -63,7 +63,7 @@ def delete_tenant():
         tenant_list.insert(0, tenant)
 
     tenant_list = list(enumerate(tenant_list))
-    print 'ID\tTenant Name'
+    print '\n' + 'ID\tTenant Name'
     for entry in tenant_list:
         print str(entry[0])+'\t'+str(entry[1])
 
